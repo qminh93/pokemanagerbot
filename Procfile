@@ -1,1 +1,1 @@
-web: python app.py 0.0.0.0:8080
+web: python app.py 0.0.0.0:$PORT
