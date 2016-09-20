@@ -1,8 +1,8 @@
 import time
-#import logging
+import logging
 import telepot
 
-#from pogo import util
+from pogo import util
 from pogo.api import PokeAuthSession
 from advanced_trainer import Champion
 
@@ -59,9 +59,9 @@ bot = telepot.Bot(TOKEN)
 bot.message_loop({'chat': on_chat_message,
                   'callback_query': on_callback_query})
 
-#util.setupLogger()
-#logging.debug('Logger set up')
-print('Listening ...')
+util.setupLogger()
+logging.debug('Logger set up')
+logging.info('Listening ...')
 
 while 1:
     time.sleep(10)
