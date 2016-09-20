@@ -4,7 +4,7 @@ import telepot
 
 #from pogo import util
 from pogo.api import PokeAuthSession
-from pogo.advanced_trainer import Champion
+from advanced_trainer import Champion
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
