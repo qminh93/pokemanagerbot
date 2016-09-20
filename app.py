@@ -1,30 +1,28 @@
-import os
-from flask import Flask, request
+import time
 import telepot
-
-try:
-    from Queue import Queue
-except ImportError:
-    from queue import Queue
-
-app = Flask(__name__)
-TOKEN = os.environ['PP_BOT_TOKEN']  # put your token in heroku app as environment variable
-SECRET = '/bot' + TOKEN
-URL = 'https://pokemanagerbot.herokuapp.com/' #  paste the url of your application
-
-UPDATE_QUEUE = Queue()
-BOT = telepot.Bot(TOKEN)
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    BOT.sendMessage(chat_id, 'hello!')
 
-BOT.message_loop({'chat': on_chat_message}, source=UPDATE_QUEUE)  # take updates from queue
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+                   [InlineKeyboardButton(text='Press me', callback_data='press')],
+               ])
 
-@app.route(SECRET, methods=['GET', 'POST'])
-def pass_update():
-    UPDATE_QUEUE.put(request.data)  # pass update to bot
-    return 'OK'
+    bot.sendMessage(chat_id, 'Use inline keyboard', reply_markup=keyboard)
 
-BOT.setWebhook() # unset if was set previously
-BOT.setWebhook(URL + SECRET)
+def on_callback_query(msg):
+    query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+    print('Callback Query:', query_id, from_id, query_data)
+
+    bot.answerCallbackQuery(query_id, text='Got it')
+
+TOKEN = '283747572:AAEdfrOnYTglaSYAqx4g0kBPHlBV7IoEifw'  # get token from command-line
+
+bot = telepot.Bot(TOKEN)
+bot.message_loop({'chat': on_chat_message,
+                  'callback_query': on_callback_query})
+print('Listening ...')
+
+while 1:
+    time.sleep(10)
