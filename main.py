@@ -10,7 +10,7 @@ except ImportError:
 app = Flask(__name__)
 TOKEN = os.environ['PP_BOT_TOKEN']  # put your token in heroku app as environment variable
 SECRET = '/bot' + TOKEN
-URL = 'https://api.telegram.org' #  paste the url of your application
+URL = 'https://pokemanagerbot.herokuapp.com/' #  paste the url of your application
 
 UPDATE_QUEUE = Queue()
 BOT = telepot.Bot(TOKEN)
