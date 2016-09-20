@@ -1,24 +1,30 @@
-import time
+import os
+from flask import Flask, request
 import telepot
 
-"""
-$ python2.7 skeleton.py <token>
-A skeleton for your telepot programs.
-"""
+try:
+    from Queue import Queue
+except ImportError:
+    from queue import Queue
 
-def handle(msg):
-    flavor = telepot.flavor(msg)
+app = Flask(__name__)
+TOKEN = os.environ['PP_BOT_TOKEN']  # put your token in heroku app as environment variable
+SECRET = '/bot' + TOKEN
+URL = 'https://api.telegram.org' #  paste the url of your application
 
-    summary = telepot.glance(msg, flavor=flavor)
-    print flavor, summary
+UPDATE_QUEUE = Queue()
+BOT = telepot.Bot(TOKEN)
 
+def on_chat_message(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    BOT.sendMessage(chat_id, 'hello!')
 
-TOKEN = '283747572:AAEdfrOnYTglaSYAqx4g0kBPHlBV7IoEifw'
+BOT.message_loop({'chat': on_chat_message}, source=UPDATE_QUEUE)  # take updates from queue
 
-bot = telepot.Bot(TOKEN)
-bot.message_loop(handle)
-print 'Listening ...'
+@app.route(SECRET, methods=['GET', 'POST'])
+def pass_update():
+    UPDATE_QUEUE.put(request.data)  # pass update to bot
+    return 'OK'
 
-# Keep the program running.
-while 1:
-    time.sleep(10)
+BOT.setWebhook() # unset if was set previously
+BOT.setWebhook(URL + SECRET)
