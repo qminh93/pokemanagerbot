@@ -167,11 +167,12 @@ def on_chat_message(msg):
                     [usr, pwd] = users[chat_id].credentials()
                     auth_session = PokeAuthSession(usr, pwd, 'google', './encrypt.so', geo_key = None)
                     session = auth_session.authenticate()
+                    time.sleep(10)
                     if session:
                         trainer = Champion(auth_session, session)
                         trainer.getProfile()
                         trainer.checkInventory()
-                        time.sleep(1)
+                        time.sleep(10)
                         process_command(chat_id)
                         valid_command = True
 
