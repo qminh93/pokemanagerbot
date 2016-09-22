@@ -10,7 +10,6 @@ import random
 from nltk.chat.eliza import eliza_chatbot
 from pogo import util
 from pogo.api import PokeAuthSession
-from pogo.pokedex import pokedex
 from advanced_trainer import Champion
 
 _help = 'Commands List:\n' \

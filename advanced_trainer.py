@@ -1,4 +1,3 @@
-import urllib
 import re
 from pogo.trainer import *
 from pogo.inventory import items
