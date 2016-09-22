@@ -1,2 +1,3 @@
 bot: python app.py
-heroku scale bot=1
+heroku ps: scale bot=1
+heroku ps: scale web=0
