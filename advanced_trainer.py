@@ -149,13 +149,25 @@ class Champion(Trainer):
         if fort:
             details = self.session.getFortDetails(fort)
             logging.info("Spinning the Fort \"%s\":", details.name)
-            if verbose: bot.sendMessage(chat_id, "Spinning the Fort \"%s\":" % details.name)
+            if verbose: bot.sendMessage(chat_id, "Spinning the Fort \"%s\" " % details.name)
             # Walk over
             self.walkTo(fort.latitude, fort.longitude, step = 3.2)
             # Give it a spin
             fortResponse = self.session.getFortSearch(fort)
+            awarded_items = dict()
+            for item in fortResponse.items_awarded:
+                if item.item_id not in awarded_items: awarded_items[item.item_id] = item.item_count
+                else: awarded_items[item.item_id] += item.item_count
+
             logging.info(fortResponse)
-            if verbose: bot.sendMessage(chat_id, fortResponse)
+            print(fortResponse.result)
+            if verbose:
+                if fortResponse.result == 1:
+                    response = 'Awarded Items:'
+                    for item in awarded_items:
+                        response += '\n' + items[item] + 'x' + str(awarded_items[item])
+                else: response = 'PokeStop on cooldown!'
+                bot.sendMessage(chat_id, response)
 
     def FindAllPokemons(self, bot, chat_id, verbose = False):
         logging.info("Finding Nearby Pokemon:")
